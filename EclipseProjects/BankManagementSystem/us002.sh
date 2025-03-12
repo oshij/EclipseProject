@@ -1,0 +1,1 @@
+awk '$5>=30000 {print $1, $2, $5}' FS='|', OFS=, customer_data.csv

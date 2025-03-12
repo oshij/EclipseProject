@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app 
+    xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <error-page>
+		<error-code>404</error-code>
+		<location>/404.jsp</location>
+	</error-page>
+	<servlet>
+	    <servlet-name>EmployeeLoginController</servlet-name>
+	    <jsp-file>/employee-login.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>EmployeeLoginController</servlet-name>
+	    <url-pattern>/</url-pattern>   
+	</servlet-mapping>
+</web-app>

@@ -1,0 +1,22 @@
+body { 
+	background-color: #f4f4f4; 
+	overflow-y: scroll;
+}
+.form-container { 
+    background-color: white; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 32px;
+    margin-top: 64px;
+    margin-bottom: 64px;
+}
+/* Hide arrows in Chrome, Safari, Edge, and Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+  	margin: 0;
+}		
+/* Hide arrows in Firefox */
+input[type="number"] {
+  	-moz-appearance: textfield;
+}

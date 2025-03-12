@@ -1,0 +1,1 @@
+awk '$1==222635 || $1==180607 {print $1, $2, $5}' FS='|', OFS=, customer_data.csv

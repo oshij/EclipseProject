@@ -1,0 +1,106 @@
+CREATE TABLE Employee (
+    employee_id VARCHAR(7) PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    password VARCHAR(255) NOT NULL,
+    address VARCHAR(100),
+    contact_number VARCHAR(10),
+    salt VARCHAR(255)
+);
+
+-- 1. Create Customer Table
+CREATE TABLE Customer (
+    customer_ssn VARCHAR(20) PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    date_of_birth DATE,
+    address VARCHAR(100),
+    contact_number VARCHAR(10)
+);
+
+-- Insert demo records
+INSERT INTO Customer VALUES
+('123-45-6789', 'John', 'Doe', 'john.doe@email.com', '1990-01-15', '123 Main St, City', '1234567890'),
+('234-56-7890', 'Jane', 'Smith', 'jane.smith@email.com', '1985-03-22', '456 Oak Ave, Town', '2345678901'),
+('345-67-8901', 'Robert', 'Johnson', 'robert.j@email.com', '1988-07-30', '789 Pine Rd, Village', '3456789012'),
+('456-78-9012', 'Mary', 'Williams', 'mary.w@email.com', '1992-11-05', '321 Elm St, County', '4567890123'),
+('567-89-0123', 'Michael', 'Brown', 'michael.b@email.com', '1983-09-18', '654 Maple Dr, State', '5678901234'),
+('678-90-1234', 'Sarah', 'Davis', 'sarah.d@email.com', '1995-04-25', '987 Cedar Ln, District', '6789012345'),
+('789-01-2345', 'James', 'Miller', 'james.m@email.com', '1987-12-08', '147 Birch Rd, Region', '7890123456'),
+('890-12-3456', 'Patricia', 'Wilson', 'patricia.w@email.com', '1993-06-14', '258 Spruce Ave, Area', '8901234567'),
+('901-23-4567', 'David', 'Taylor', 'david.t@email.com', '1986-02-28', '369 Pine St, Zone', '9012345678'),
+('012-34-5678', 'Linda', 'Anderson', 'linda.a@email.com', '1991-08-11', '741 Oak Rd, Sector', '0123456789');
+
+-- 2. Retrieve customer details by customer id
+SELECT *
+FROM Customer
+WHERE customer_ssn = :customer_ssn;
+
+-- 3. Update customer personal data
+UPDATE Customer
+SET address = :new_address,
+    contact_number = :new_contact_number
+WHERE customer_ssn = :customer_ssn;
+
+-- Query to show updated data
+SELECT 
+    customer_ssn,
+    CONCAT(CONCAT(first_name, ' '), last_name) as full_name,
+    email,
+    contact_number,
+    address
+FROM Customer
+WHERE customer_ssn = :customer_ssn;
+
+-- 4. Create Customer Transaction Table
+CREATE TABLE CustomerTransaction (
+    customer_id VARCHAR(20) PRIMARY KEY,
+    customer_name VARCHAR(100),
+    account_number VARCHAR(20),
+    ifsc_code VARCHAR(11),
+    account_balance DECIMAL(15,2),
+    aadhaar_number VARCHAR(12),
+    pan_number VARCHAR(10),
+    contact_number VARCHAR(10),
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_ssn)
+);
+
+-- Insert demo records
+INSERT INTO CustomerTransaction VALUES
+('123-45-6789', 'John Doe', 'ACC001', 'IFSC001', 50000.00, '123456789012', 'ABCDE1234F', '1234567890'),
+('234-56-7890', 'Jane Smith', 'ACC002', 'IFSC002', 75000.00, '234567890123', 'BCDEF2345G', '2345678901'),
+('345-67-8901', 'Robert Johnson', 'ACC003', 'IFSC003', 60000.00, '345678901234', 'CDEFG3456H', '3456789012'),
+('456-78-9012', 'Mary Williams', 'ACC004', 'IFSC004', 85000.00, '456789012345', 'DEFGH4567I', '4567890123'),
+('567-89-0123', 'Michael Brown', 'ACC005', 'IFSC005', 95000.00, '567890123456', 'EFGHI5678J', '5678901234'),
+('678-90-1234', 'Sarah Davis', 'ACC006', 'IFSC006', 70000.00, '678901234567', 'FGHIJ6789K', '6789012345'),
+('789-01-2345', 'James Miller', 'ACC007', 'IFSC007', 55000.00, '789012345678', 'GHIJK7890L', '7890123456'),
+('890-12-3456', 'Patricia Wilson', 'ACC008', 'IFSC008', 65000.00, '890123456789', 'HIJKL8901M', '8901234567'),
+('901-23-4567', 'David Taylor', 'ACC009', 'IFSC009', 80000.00, '901234567890', 'IJKLM9012N', '9012345678'),
+('012-34-5678', 'Linda Anderson', 'ACC010', 'IFSC010', 90000.00, '012345678901', 'JKLMN0123O', '0123456789');
+
+-- 5. Search customer personal and transactional data
+SELECT 
+    c.customer_ssn as customer_id,
+    ct.customer_name,
+    ct.account_number,
+    ct.ifsc_code,
+    ct.pan_number,
+    TO_CHAR(c.date_of_birth, 'DD-MM-YYYY') as formatted_dob,
+    c.email,
+    c.address,
+    c.contact_number
+FROM Customer c
+JOIN CustomerTransaction ct ON c.customer_ssn = ct.customer_id
+WHERE c.customer_ssn = :customer_ssn;
+
+-- 6. Check updated account balance
+SELECT 
+    ct.customer_id,
+    ct.customer_name,
+    c.email,
+    ct.account_balance
+FROM CustomerTransaction ct
+JOIN Customer c ON ct.customer_id = c.customer_ssn
+WHERE ct.customer_id = :customer_id;

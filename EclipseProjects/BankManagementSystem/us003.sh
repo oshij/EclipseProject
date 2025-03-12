@@ -1,0 +1,1 @@
+awk -v IGNORECASE=1 '$4=="joint" {total+=$5} END {print $1, $2, $5}' FS='|', OFS=, customer_data.csv
